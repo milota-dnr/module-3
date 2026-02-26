@@ -21,9 +21,10 @@ html{
     gap: 10px;
 }
 #player{
+    display: none;
     position: absolute;
-    bottom: 10;
-    left: 20;
+    top: 10px;
+    left: 300px;
     background-color: black;
     width: 100px;
     height: 100px;
@@ -40,17 +41,26 @@ html{
     position: absolute;
     width: 40px;
     height: 40px;
-    top: 10%;
-    left: 60%;
+    background-color: gold;
+    border-radius: 100%;
 }
 
 #path{
 position: relative;    
 top: 0;
 width: 100vw;
+display: none;
 }
-header{
-    display: block;
+#rara{
+    width: 20px;
+    height: 20px;
+    background-color: yellow;
+}
+#header{
+    display: none;
+}
+#player, #money {
+    position: absolute;
 }
 
 #pulya{
@@ -65,5 +75,49 @@ header{
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+}
+#form{
+    display: block;
+    position: absolute;
+    left: 35%;
+    top: 40%;
+}
+#snaryad {
+  position: absolute;
+  top: 100px; /* начальная позиция */
+  left: 50px;
+}
+#asteroids-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* чтобы астероиды не мешали другим событиям */
+}
 
+.asteroid {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: #888;
+  border-radius: 50%;
+  pointer-events: auto; /* чтобы можно было обнаружить столкновение */
+}
+
+#snaryad {
+  position: absolute;
+  width: 10px;
+  height: 20px;
+  background-color: red;
+  display: none; /* изначально скрыта */
+}
+.bullet {
+  position: absolute;
+  width: 8px;
+  height: 16px;
+  background-color: red;
+  border-radius: 50% 50% 0 0;
+  z-index: 10;
 }
