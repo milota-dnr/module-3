@@ -346,3 +346,162 @@ window.addEventListener('load', () => {
   }
   gameLoop();
 });
+const asteroidsContainer = document.getElementById('asteroids-container');
+const ASTEROID_SPAWN_INTERVAL = 2000; // мс между появлением астероидов
+const ASTEROID_SPEED = 3; // скорость движения астероида
+let playerHealth = 100; // начальное здоровье игрока
+const HEALTH_DECREASE = 10; // сколько здоровья отнимает один астероид
+function createAsteroid() {
+  const asteroid = document.createElement('div');
+  asteroid.classList.add('asteroid');
+
+  // Случайная позиция по горизонтали (в пределах контейнера)
+  const containerWidth = document.getElementById('container').offsetWidth;
+  const randomX = Math.random() * (containerWidth - 50); // -50 чтобы не вылезал за край
+
+  // Начальная позиция сверху
+  asteroid.style.left = randomX + 'px';
+  asteroid.style.top = '-50px'; // начинаем за пределами экрана сверху
+
+  asteroidsContainer.appendChild(asteroid);
+  return asteroid;
+}
+function moveAsteroid(asteroid) {
+  const animate = () => {
+    const currentTop = parseInt(asteroid.style.top) || 0;
+
+    if (currentTop < document.getElementById('container').offsetHeight) {
+      // Двигаем вниз
+      asteroid.style.top = (currentTop + ASTEROID_SPEED) + 'px';
+      requestAnimationFrame(animate);
+    } else {
+      // Удаляем, если вышел за экран
+      asteroid.remove();
+    }
+  };
+  animate();
+}
+function checkAsteroidPlayerCollisions() {
+  const asteroids = document.querySelectorAll('.asteroid');
+
+  asteroids.forEach(asteroid => {
+    const asteroidRect = asteroid.getBoundingClientRect();
+    const playerRect = player.getBoundingClientRect();
+
+    if (checkCollision(asteroidRect, playerRect)) {
+      handleAsteroidCollision(asteroid);
+    }
+  });
+}
+function handleAsteroidCollision(asteroid) {
+  // Удаляем астероид
+  asteroid.remove();
+
+  // Уменьшаем здоровье игрока
+  playerHealth -= HEALTH_DECREASE;
+  playerHealth = Math.max(0, playerHealth); // не позволяем уйти в минус
+
+  // Обновляем отображение здоровья
+  updatePlayerHealthDisplay();
+
+  console.log('Столкновение с астероидом! Здоровье: ' + playerHealth);
+
+  // Если здоровье закончилось — игра окончена
+  if (playerHealth <= 0) {
+    gameOver();
+  }
+}
+function updatePlayerHealthDisplay() {
+  heartCount.textContent = playerHealth;
+
+  // Можно добавить визуальные эффекты при низком здоровье
+  if (playerHealth <= 30) {
+    heartCount.style.color = 'red';
+  } else {
+    heartCount.style.color = 'white';
+  }
+}
+
+/*/*/
+function updateEnemyHealthDisplay() {
+  // Расчёт процента здоровья
+  const healthPercent = Math.max(0, Math.min(100, (enemyCurrentHealth / ENEMY_MAX_HEALTH) * 100));
+
+
+  // Обновляем ширину полосы здоровья
+  enemyHealthFill.style.width = healthPercent + '%';
+
+  // Меняем цвет в зависимости от уровня здоровья
+  if (healthPercent > 60) {
+    enemyHealthFill.style.background = '#2ecc71'; // Зелёный
+  } else if (healthPercent > 30) {
+    enemyHealthFill.style.background = '#f39c12'; // Оранжевый
+  } else {
+    enemyHealthFill.style.background = '#e74c3c'; // Красный
+  }
+
+  // Обновляем текстовое отображение
+  enemyHealthText.textContent = Math.max(0, enemyCurrentHealth) + '/' + ENEMY_MAX_HEALTH;
+}
+function handleCollision(bullet, enemy) {
+  // Удаляем пулю после попадания
+  bullet.remove();
+
+  // Наносим урон врагу — например, 5 очков за попадание
+  const DAMAGE_PER_HIT = 5;
+  enemyCurrentHealth -= DAMAGE_PER_HIT;
+
+  console.log('Попадание в врага! Здоровье: ' + enemyCurrentHealth);
+
+  // Обновляем отображение здоровья
+  updateEnemyHealthDisplay();
+
+  // Проверяем, уничтожен ли враг
+  if (enemyCurrentHealth <= 0) {
+    // Уничтожаем врага
+    destroyEnemy(enemy);
+    // Обновляем счётчик уничтоженных врагов
+    updateEnemyCount();
+    // Сбрасываем здоровье для следующего врага
+    enemyCurrentHealth = ENEMY_MAX_HEALTH;
+  }
+}
+window.addEventListener('load', () => {
+  initPlayerPosition();
+  // Инициализируем отображение здоровья врага
+  if (enemyHealthFill && enemyHealthText) {
+    updateEnemyHealthDisplay();
+  }
+  gameLoop();
+});
+window.addEventListener('load', () => {
+  initPlayerPosition();
+  // Инициализируем отображение здоровья врага
+  if (enemyHealthFill && enemyHealthText) {
+    updateEnemyHealthDisplay();
+  }
+  gameLoop();
+});
+// Проверяем коллизии 60 раз в секунду (более плавно)
+setInterval(checkBulletEnemyCollisions, 1000 / 60);
+function handleCollision(bullet, enemy) {
+  // Удаляем пулю после попадания
+  bullet.remove();
+
+  // Наносим урон врагу
+  const DAMAGE_PER_HIT = 5; // Урон за одно попадание — 5 очков
+  enemyCurrentHealth -= DAMAGE_PER_HIT;
+
+  console.log('Попадание в врага! Здоровье: ' + enemyCurrentHealth);
+
+  // Обновляем визуальное отображение здоровья
+  updateEnemyHealthDisplay();
+
+  // Проверяем, уничтожен ли враг
+  if (enemyCurrentHealth <= 0) {
+    // Враг уничтожен — выполняем действия
+    destroyEnemy(enemy);
+    updateEnemyCount();
+    enemyCurrentHealth = ENEMY_MAX_HEALTH; // Сбрасываем здоровье для следующего врага
+  }
+}

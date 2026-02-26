@@ -185,3 +185,69 @@ display: none;
   font-weight: bold;
   text-shadow: 1px 1px 2px #000;
 }
+#asteroids-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* чтобы астероиды не мешали другим событиям */
+}
+
+.asteroid {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: #888;
+  border-radius: 50%;
+  pointer-events: auto; /* чтобы можно было обнаружить столкновение */
+}
+#bullets-info {
+  position: absolute;
+  top: 10px;
+  left: 200px;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 100;
+}
+
+.bullet-pack {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ff6b6b;
+}#enemy-health-container {
+  position: absolute;
+  top: -25px; /* Располагаем над врагом */
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+#enemy-health-bar {
+  width: 80px;
+  height: 8px;
+  background: #555;
+  border-radius: 4px;
+  margin: 0 auto 4px;
+  position: relative;
+}
+
+#enemy-health-fill {
+  height: 100%;
+  background: #2ecc71; /* Изначально зелёный */
+  border-radius: 4px;
+  width: 100%; /* Изначально полное здоровье */
+  transition: width 0.2s ease;
+}
+
+#enemy-health-text {
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  textshadow: 1px 1px 2px #000;
+}
+
