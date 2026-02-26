@@ -8,7 +8,8 @@
 </head>
 <body>
     <div id="container">
-        <header>
+        
+        <header id="header">
             <div>
                 <img src=" " id="wars">
             </div>
@@ -21,8 +22,8 @@
                 <div id="heart-count">0</div>
             </div>
             <div id="block">
-                <div id="money">Монеты:</div>
-                <div id="money-count">0</div>
+                <div id="money-count">Монеты:</div>
+                <div id="money-count-text">0</div>
             </div>
             <div id="block">
                 <div id="arm">Заряды:</div>
@@ -33,13 +34,17 @@
                 <div id="time-count">00:00</div>
             </div>
         </header>
-        <main>
+        <main id="main">
+            <div id="time-start">3</div>
             <form action="">
-                <input type="button" value="Отправить">
+                <input type="text" name="name" id="user-name" required>
+                <input type="button" id="button-start" value="Отправить">
             </form>
         </main>
-        <footer>
-            Ракета игрока
+        <footer id="footer">
+            <div id="path" style="width: 50px; height: 500px; position: absolute;" >
+                <div id="rara">Пуля</div>
+            </div>
             <img src=" " id="player">
         </footer>
     </div>

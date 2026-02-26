@@ -15,6 +15,8 @@ const heartCount = document.getElementById('heart-count')
 const player = document.getElementById('player')
 const warsElement = document.getElementById('wars')
 const moneyElement = document.getElementById('money')
+const pulya = document.getElementById('pulya')
+
 
 const speedY = 10;
 
@@ -29,7 +31,6 @@ console.log('Стартовые позиции', playerPosX + '   ' + playerPosY
 function updatePlayerPosition() {
     player.style.left = playerPosX + 'px'; 
     player.style.top = playerPosY + 'px';  
-    console.log(`Позиция: X = ${playerPosX} px, Y = ${playerPosY} px`);
 }
 
 function initPlayerPosition() {
@@ -78,9 +79,47 @@ function updateGame() {
     if (checkCollision(moneyRect, playerRect)) {
         
         moneyElement.style.display = 'none';
-        const currentMoney = moneyCount += 1
+        
     }
 }
 
 
+
+const header = document.getElementById('header')
 setInterval(updateGame, 1000 / 30);
+const timeStartCount = document.getElementById('time-start')
+
+const userName = document.getElementById('user-name')
+const buttonStart = document.getElementById('button-start')
+
+buttonStart.addEventListener('click', function(){
+     const value = userName.value.trim(); // Убираем пробелы по краям
+    const length = value.length;
+    if(length>=5){
+        console.log('регистрация')
+        timeStartCount.textContent -=1
+        player.style.display = 'block'
+
+    }
+    // Логика начала игры
+    if(length<5){
+        header.style.display = 'none';
+        
+    }
+    if(timeStartCount<2){
+        console.log('Началось')
+    }
+})
+
+/*
+const userName = document.getElementById('user-name')
+const buttonStart = document.getElementById('button-start')
+
+userName.addEventListener('input', function(){
+     const value = this.value.trim(); // Убираем пробелы по краям
+    const length = value.length;
+    console.log(length)
+    if(length>5){
+        console.log(65465464546+45)
+    }
+})*/
