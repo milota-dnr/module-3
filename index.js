@@ -243,34 +243,28 @@ function checkBulletEnemyCollisions() {
         }
     });
 }
-function handleCollision(bullet, enemy) {
-    // Удаляем пулю
-    bullet.remove();
 
-    // Здесь можно добавить эффекты взрыва, звука и т. д.
-    console.log('Попадание в врага!');
-
-    // Уничтожаем врага (или уменьшаем здоровье)
-    destroyEnemy(enemy);
-
-    // Обновляем счётчик уничтоженных врагов
-    updateEnemyCount();
-}
 
 function destroyEnemy(enemy) {
-    enemy.style.display = 'none';
-    // Можно добавить анимацию взрыва перед удалением
-    setTimeout(() => {
-        resetEnemy(enemy); // Возрождаем врага через некоторое время
-    }, 2000); // Через 2 секунды
+  enemy.style.display = 'none';
+  // Можно добавить анимацию взрыва перед удалением
+  setTimeout(() => {
+    resetEnemy(enemy); // Возрождаем врага через некоторое время
+  }, 2000); // Через 2 секунды
 }
 
+
 function resetEnemy(enemy) {
-    enemy.style.display = 'block';
-    // Случайная позиция для врага
-    enemy.style.left = Math.random() * 700 + 'px';
-    enemy.style.top = Math.random() * 500 + 'px';
+  enemy.style.display = 'block';
+  // Случайная позиция для врага
+  enemy.style.left = Math.random() * 700 + 'px';
+  enemy.style.top = Math.random() * 500 + 'px';
+
+  // Сбрасываем здоровье врага
+  enemyCurrentHealth = ENEMY_MAX_HEALTH;
+  updateEnemyHealthDisplay();
 }
+
 
 function updateEnemyCount() {
     // Пример обновления счётчика уничтоженных врагов
@@ -293,3 +287,62 @@ window.addEventListener('load', () => {
 });
 // Проверяем коллизии 60 раз в секунду (более плавно)
 setInterval(checkBulletEnemyCollisions, 1000 / 60);
+const ENEMY_MAX_HEALTH = 100; // Максимальное здоровье врага
+let enemyCurrentHealth = ENEMY_MAX_HEALTH; // Текущее здоровье врага
+
+// Получаем элементы для отображения здоровья
+const enemyHealthFill = document.getElementById('enemy-health-fill');
+const enemyHealthText = document.getElementById('enemy-health-text');
+function updateEnemyHealthDisplay() {
+  // Ограничиваем здоровье в пределах 0–100 %
+  const healthPercent = Math.max(0, Math.min(100, (enemyCurrentHealth / ENEMY_MAX_HEALTH) * 100));
+
+  // Обновляем ширину полосы здоровья
+  enemyHealthFill.style.width = healthPercent + '%';
+
+  // Меняем цвет в зависимости от уровня здоровья
+  if (healthPercent > 60) {
+    enemyHealthFill.style.background = '#2ecc71'; // Зелёный
+  } else if (healthPercent > 30) {
+    enemyHealthFill.style.background = '#f39c12'; // Оранжевый
+  } else {
+    enemyHealthFill.style.background = '#e74c3c'; // Красный
+  }
+
+  // Обновляем текстовое отображение
+  enemyHealthText.textContent = Math.max(0, enemyCurrentHealth) + '/' + ENEMY_MAX_HEALTH;
+}
+
+
+function handleCollision(bullet, enemy) {
+  // Удаляем пулю
+  bullet.remove();
+
+  // Наносим урон врагу — теперь 10 единиц за попадание
+  const DAMAGE_PER_HIT = 10;
+  enemyCurrentHealth -= DAMAGE_PER_HIT;
+
+  console.log('Попадание в врага! Здоровье: ' + enemyCurrentHealth);
+
+  // Обновляем отображение здоровья
+  updateEnemyHealthDisplay();
+
+  // Проверяем, уничтожен ли враг
+  if (enemyCurrentHealth <= 0) {
+    // Уничтожаем врага
+    destroyEnemy(enemy);
+    // Обновляем счётчик уничтоженных врагов
+    updateEnemyCount();
+    // Сбрасываем здоровье для следующего врага
+    enemyCurrentHealth = ENEMY_MAX_HEALTH;
+  }
+}
+
+window.addEventListener('load', () => {
+  initPlayerPosition();
+  // Инициализируем отображение здоровья врага
+  if (enemyHealthFill && enemyHealthText) {
+    updateEnemyHealthDisplay();
+  }
+  gameLoop();
+});

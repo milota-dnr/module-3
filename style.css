@@ -26,7 +26,7 @@ html{
     top: 10px;
     left: 300px;
     background-color: black;
-    width: 100px;
+    width: 290px;
     height: 100px;
     
     
@@ -120,4 +120,68 @@ display: none;
   background-color: red;
   border-radius: 50% 50% 0 0;
   z-index: 10;
+}
+#wars {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  background-color: red; /* для видимости */
+  position: absolute;
+  left: 300px;
+  top: 100px; /* фиксированная высота */
+  animation: moveLeftRight 10s linear infinite; /* 5 с на цикл, бесконечно */
+}
+
+@keyframes moveLeftRight {
+  0% {
+    left: 0;
+  }
+  50% {
+    left: calc(600px - 50px); /* ширина контейнера минус ширина врага */
+  }
+  100% {
+    left: 0;
+  }
+}
+#player {
+  position: absolute;
+  /* остальные стили игрока */
+}
+
+#container {
+  position: relative;
+  width: 800px; /* или ваша ширина */
+  height: 600px; /* или ваша высота */
+  overflow: hidden;
+}
+#enemy-health-container {
+  position: absolute;
+  top: -25px; /* Располагаем над врагом */
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+#enemy-health-bar {
+  width: 80px;
+  height: 8px;
+  background: #555;
+  border-radius: 4px;
+  margin: 0 auto 4px;
+  position: relative;
+}
+
+#enemy-health-fill {
+  height: 100%;
+  background: #e74c3c;
+  border-radius: 4px;
+  width: 100%; /* Изначально полное здоровье */
+  transition: width 0.2s ease;
+}
+
+#enemy-health-text {
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px #000;
 }
