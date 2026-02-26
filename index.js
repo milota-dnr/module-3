@@ -505,3 +505,64 @@ function handleCollision(bullet, enemy) {
     enemyCurrentHealth = ENEMY_MAX_HEALTH; // Сбрасываем здоровье для следующего врага
   }
 }
+if (typeof window !== 'undefined') {
+  const { worker, rest } = window.msw;
+
+  worker.start({
+    onUnhandledRequest: 'bypass'
+  });
+
+  worker.use(
+    // GET-запрос: получение списка пользователей
+    rest.get('/api/users', (req, res, ctx) => {
+      return res(
+        ctx.status(200),
+        ctx.json({
+          users: [
+            { id: 1, name: 'Анна', email: 'anna@example.com' },
+            { id: 2, name: 'Иван', email: 'ivan@example.com' }
+          ],
+          total: 2
+        })
+      );
+    }),
+
+    // POST-запрос: создание нового пользователя
+    rest.post('/api/users', async (req, res, ctx) => {
+      const { name, email } = await req.json();
+      return res(
+        ctx.status(201),
+        ctx.json({
+          id: Date.now(),
+          name,
+          email,
+          createdAt: new Date().toISOString()
+        })
+      );
+    }),
+
+    // PUT-запрос: обновление пользователя
+    rest.put('/api/users/:id', async (req, res, ctx) => {
+      const { id } = req.params;
+      const { name, email } = await req.json();
+      return res(
+        ctx.status(200),
+        ctx.json({
+          id: Number(id),
+          name,
+          email,
+          updatedAt: new Date().toISOString()
+        })
+      );
+    }),
+
+    // DELETE-запрос: удаление пользователя
+    rest.delete('/api/users/:id', (req, res, ctx) => {
+      const { id } = req.params;
+      return res(
+        ctx.status(200),
+        ctx.json({ message: `Пользователь ${id} удалён` })
+      );
+    })
+  );
+}
